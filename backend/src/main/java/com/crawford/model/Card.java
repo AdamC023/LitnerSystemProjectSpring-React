@@ -12,15 +12,17 @@ public class Card {
 
   private String question;
   private String answer;
+  private boolean correct;
 
   /**Blank constructor for hibernate. */
 
   public Card(){
   }
   /** Constructor for Registration. */
-  public Card(String question, String answer) {
+  public Card(String question, String answer, boolean correct) {
     this.answer = answer;
     this.question = question;
+    this.correct = correct;
   }
 
   public Integer getCard_id(){
@@ -37,6 +39,14 @@ public class Card {
 
   public String getQuestion(){
       return question;
+  }
+  
+  public boolean getCorrect() {
+	  return correct;
+  }
+  
+  public void setCorrect(boolean correct) {
+	  this.correct = correct;
   }
 
   public void setAnswer(String answer){

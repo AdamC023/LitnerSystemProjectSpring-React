@@ -3,7 +3,8 @@ DROP TABLE IF EXISTS card;
 CREATE TABLE card(
                      id INT PRIMARY KEY,
                      question VARCHAR(30),
-                     answer VARCHAR(30)
+                     answer VARCHAR(30),
+                    correct bit
 );
 
 INSERT INTO card(id,question,answer)
