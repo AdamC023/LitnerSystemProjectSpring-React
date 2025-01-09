@@ -1,17 +1,14 @@
-import { useState } from 'react'
-
+import { useEffect,useState } from 'react'
+import axios from 'axios'
 import './App.css'
+import AddCard from "./AddCard.jsx";
 
 function App() {
-  const [count, setCount] = useState(0)
+    return(
+        <AddCard/>
+    )
 
-  return (
-    <>
-      <h1>
-          Add Card Page
-      </h1>
-    </>
-  )
+
 }
 
 export default App
