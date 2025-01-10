@@ -22,8 +22,7 @@ public class CardController {
     @Autowired
     private CardRepository cardRepository;
 
-    @Autowired
-    private ModuleRepository moduleRepository;
+    
 
     @PostMapping("/addCard")
     public Card addCard(@RequestBody Card card) {
@@ -45,6 +44,12 @@ public class CardController {
     	}
     	return card;
     	
+    }
+    
+    @GetMapping("/getModuleCardCount/{code}")
+    public int countCards(@PathVariable String code) {
+    	int count = cardRepository.countByModule_Code(code);
+    	return count;
     }
 
 

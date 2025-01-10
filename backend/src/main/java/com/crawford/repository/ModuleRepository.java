@@ -8,4 +8,6 @@ import com.crawford.model.Module;
 public interface ModuleRepository extends CrudRepository<Module, Long> {
 
 	Module findByCode(String code);
+
+	
 }
