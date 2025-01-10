@@ -27,6 +27,11 @@ public class CardController {
     	return cardRepository.save(card);
     }
 
+    @GetMapping("/getCards")
+    public Iterable<Card> getCards(){
+    	return cardRepository.findAll();
+    }
+
 
 
 }
