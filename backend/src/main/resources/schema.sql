@@ -1,11 +1,17 @@
 DROP TABLE IF EXISTS card;
+DROP TABLE IF EXISTS module;
 
-CREATE TABLE card(
-                     id INT PRIMARY KEY,
-                     question VARCHAR(30),
-                     answer VARCHAR(30),
-                    correct bit
+CREATE TABLE module (
+                        code VARCHAR(30) PRIMARY KEY,
+                        name VARCHAR(30)
+
 );
 
-INSERT INTO card(id,question,answer)
-VALUES(0,'1','2');
+CREATE TABLE card (
+                      id INT PRIMARY KEY,
+                      question VARCHAR(30),
+                      answer VARCHAR(30),
+                      correct BIT,
+                      code VARCHAR(30), -- Add the 'code' column to reference the module table
+                      CONSTRAINT fk_module FOREIGN KEY (code) REFERENCES module(code)
+);

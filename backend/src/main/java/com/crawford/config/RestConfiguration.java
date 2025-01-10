@@ -14,6 +14,7 @@ public class RestConfiguration implements RepositoryRestConfigurer {
   public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config,
       CorsRegistry cors) {
       config.exposeIdsFor(Card.class);
+      config.exposeIdsFor(Module.class);
 
   }
 
