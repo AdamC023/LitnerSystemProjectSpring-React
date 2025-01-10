@@ -6,4 +6,7 @@ import com.crawford.model.Card;
 
 @Repository
 public interface CardRepository extends CrudRepository<Card, Integer> {
+	
+	int countByModule_Code(String code);
+
 }

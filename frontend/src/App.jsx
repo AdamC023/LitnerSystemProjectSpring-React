@@ -3,6 +3,7 @@ import {Link, Route, Routes} from 'react-router-dom';
 import AddCard from "./pages/AddCard.jsx";
 import AddModules from "./pages/AddModules.jsx";
 import Answer from "./pages/Answer.jsx";
+import Modules from "./pages/Modules.jsx";
 function Home() {
     return <h2>Welcome to the Litner System!</h2>;
 }
@@ -17,6 +18,7 @@ function App() {
                 <Link to="/addCard">Add Card</Link>
                 <Link to="/addModules">Add Modules</Link>
                 <Link to="/answer">Answer Cards</Link>
+                <Link to="/modules">Modules</Link>
             </nav>
             <div>
                 <Routes>
@@ -24,6 +26,7 @@ function App() {
                     <Route path="/" element={<Home/>}/>
                     <Route path="/addModules" element={<AddModules/>}/>
                     <Route path="/answer" element={<Answer/>}/>
+                    <Route path="/modules" element={<Modules/>}/>
                 </Routes>
             </div>
         </>
