@@ -9,6 +9,7 @@ import com.crawford.model.Module;
 import com.crawford.repository.ModuleRepository;
 
 @RestController
+@RequestMapping("modules")
 @CrossOrigin(origins = "http://localhost:5173") // Allow requests from your React frontend
 public class ModuleController{
 
@@ -22,7 +23,6 @@ public class ModuleController{
     @PostMapping
     ("/addModule")
     public Module addModule(@RequestBody Module module) {
-    	
         return moduleRepository.save(module);
     }
     

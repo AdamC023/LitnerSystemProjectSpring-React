@@ -25,7 +25,7 @@ function AddCard() {
                 }
         }
         console.log("Card to submit: " + addCard.question+ " " + addCard.answer);
-        axios.post("http://localhost:2800/cards", addCard)
+        axios.post("http://localhost:2800/cards/addCard", addCard)
             .then(res => {
                 console.log(res)
                 console.log(res.data)
@@ -37,7 +37,7 @@ function AddCard() {
     }
     useEffect(() => {
 
-        axios.get("http://localhost:2800/getModules")
+        axios.get("http://localhost:2800/modules/getModules")
             .then(res => {
                 console.log("Modules: ")
                 console.log(res)
@@ -77,8 +77,8 @@ function AddCard() {
             <h1>
                 Add Card Page
             </h1>
-            <input type="text" name="answer" placeholder="question" onChange={handleChange}/>
-            <input type="text" name="question" placeholder="answer" onChange={handleChange}/>
+            <input type="text" name="question" placeholder="question" onChange={handleChange}/>
+            <input type="text" name="answer" placeholder="answer" onChange={handleChange}/>
             <select name="module" onChange={handleChangeModule}>
                 <option value="">None</option>
                 {modules.map(module => (

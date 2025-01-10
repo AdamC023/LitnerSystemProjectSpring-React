@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import com.crawford.model.Card;
 
 @Repository
-public interface CardRepository extends CrudRepository<Card, Long> {
+public interface CardRepository extends CrudRepository<Card, Integer> {
 }

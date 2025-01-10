@@ -1,6 +1,9 @@
 package com.crawford.controller;
 
 import com.crawford.model.Module;
+
+import java.util.Optional;
+
 import org.hibernate.mapping.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +25,7 @@ public class CardController {
     @Autowired
     private ModuleRepository moduleRepository;
 
-    @PostMapping
+    @PostMapping("/addCard")
     public Card addCard(@RequestBody Card card) {
     	return cardRepository.save(card);
     }
@@ -31,7 +34,18 @@ public class CardController {
     public Iterable<Card> getCards(){
     	return cardRepository.findAll();
     }
-
+    
+    @PostMapping("/updateTrue")
+    public Card updateCards(@RequestBody Card card) {
+    	Optional<Card> cardOptional = cardRepository.findById(card.getCard_id());
+    	if(cardOptional.isPresent()) {
+    		Card cardToUpdate = cardOptional.get();
+    		cardToUpdate.setCorrect(true);
+    		cardRepository.save(cardToUpdate);
+    	}
+    	return card;
+    	
+    }
 
 
 }

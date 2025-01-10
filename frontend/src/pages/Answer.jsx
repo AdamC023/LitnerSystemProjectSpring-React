@@ -4,72 +4,109 @@ import '../App.css'
 
 function Answer() {
     const [answer,setAnswer] = useState("")
-    const [card, setCard] = useState({
-        answer: "",
-        card_id: null,
-        correct: false,
-        module: {
-            code:"",
-            name:"",
-        },
-        question: "",
-
-    });
+    const [card, setCard] = useState([]);
+    const [reload,setReload] = useState(false)
+    const [submitted, setSubmitted] = useState([false,]);
 
     useEffect(() => {
         axios.get("http://localhost:2800/cards/getCards")
             .then(res => {
-                console.log(res.data)
-                setCard(res.data[0])
-
-            })
-        .catch(err =>{
-            console.log(err)
-
-        })
-    },[])
+                console.log("Response: ",res.data)
+                if (res.data.length > 0) {
+                    console.log("Cards: ",res.data)
+                    setCard(res.data)
+                    for(let i = 0; i < res.data.length; i++){
+                        setSubmitted(prevState => {
+                            prevState[i+1] = false;
+                            return prevState;
+                        });
+                    }
+                } else {
+                    // Handle case when there are no cards returned
+                    setCard(prevState => {
+                        prevState.push({
+                            answer: "",
+                            correct: false,
+                            question: "none present",
+                            module: {
+                                code: "",
+                                name: ""
+                            },
+                            card_id: null
+                        })
+                    });
+                }
+            }).catch(err => {
+            console.error("Error fetching data:", err);
+            setCard({
+                answer: "",
+                correct: false,
+                question: "none present",
+                module: {
+                    code: "",
+                    name: ""
+                },
+                card_id: null
+            });
+        });
+    }, []);
 
     function onAnswerChange(e){
         setAnswer(e.target.value)
         console.log(answer)
+        console.log(card)
     }
 
-    function handleSubmit(){
-        setAnswer(document.getElementById("answer").value)
-        console.log("Submited" + answer)
+    function handleSubmit(e) {
+        setSubmitted(prevState => {
+            // Create a new copy of the previous state to avoid direct mutation
+            const updatedState = { ...prevState };
 
-    }
+            // Update the state for the specific card (or item) based on e.target.value
+            updatedState[e.target.value] = true;
 
-    function handleCorrect(){
-        setCard(prevCard => {
-            const updatedCard = {...prevCard, correct: true};
+            // Log the updated state (for debugging purposes)
+            console.log(updatedState);
 
-            console.log("UPDATED" +updatedCard.correct)
-            axios.post("http://localhost:2800/cards/answered/", card)
-                .then(res => {
-                    console.log(res)
-                    console.log(res.data)
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-            return updatedCard;
+            // Return the new state object to set it as the new state
+            return updatedState;
         });
+    }
 
+    function handleCorrect(card){
+        setCard(prevState => {
+            card.correct = true
+            return prevState;
+        })
+        axios.post("http://localhost:2800/cards/updateTrue", card)
+            .then(res => {
+                console.log(res)
+                console.log(res.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+
+        setReload(!reload)
     }
     function handleIncorrect(){
-        setCard(card.correct = false)
-        console.log(card.correct)
+
     }
     return(
         <>
+            {card.filter(card => card.correct === false).map(card => {
 
-        <h2>{card.question}</h2>
-            <input type="text" id="answer" name="answer" placeholder="answer" onChange={onAnswerChange}/>
-            <button onClick={handleSubmit}>submit</button>
-            <p>{answer}</p>
-            <button onClick={handleCorrect}>click if you got it right</button>
-            <button onClick={handleIncorrect}>click if you got it wrong</button>
+                return(
+                    <div key={card.card_id}>
+                        <h1>{card.question}</h1>
+                        <input type="text" onChange={onAnswerChange}/>
+                        <button value={card.card_id} onClick={handleSubmit}>Submit</button>
+                        <button  onClick={() => handleCorrect(card)}>Correct</button>
+                        <button onClick={handleIncorrect}>Incorrect</button>
+                        {submitted[card.card_id] ? <p>{card.answer}</p> : <p></p>}
+                    </div>
+                )
+            })}
         </>
 
     )

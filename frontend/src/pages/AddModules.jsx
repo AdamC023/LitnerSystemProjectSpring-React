@@ -15,13 +15,10 @@ function AddModules() {
         })
     }
 
-    const addModule = e => {
-        const addCard = {
-            name: module.name,
-            code: module.code,
-        }
+    const addModule = () => {
 
-        axios.post("http://localhost:2800/addModule", addCard)
+
+        axios.post("http://localhost:2800/modules/addModule", module)
             .then(res => {
                 console.log(res)
                 console.log(res.data)
@@ -39,8 +36,20 @@ function AddModules() {
             <h1>
                 Add Module Page
             </h1>
-            <input type="text" name="name" placeholder="name" onChange={handleChange} />
-            <input type="text" name="code" placeholder="code" onChange={handleChange} />
+            <input
+                type="text"
+                name="name"
+                placeholder="Name"
+                value={module.name}
+                onChange={handleChange}
+            />
+            <input
+                type="text"
+                name="code"
+                placeholder="Code"
+                value={module.code}
+                onChange={handleChange}
+            />
             <p>{module.name}</p>
             <p>{module.code}</p>
             <button type="submit" onClick={addModule}>submit</button>
