@@ -1,15 +1,19 @@
 import { useEffect,useState } from 'react'
 import axios from 'axios'
 import '../App.css'
+import {useParams} from "react-router-dom";
+import AddCard from "./AddCard.jsx";
 
 function Answer() {
     const [answer,setAnswer] = useState("")
     const [card, setCard] = useState([]);
     const [reload,setReload] = useState(false)
     const [submitted, setSubmitted] = useState([false,]);
-
+    const module_code = useParams();
+    console.log("module code",module_code.code)
+    console.log("module name",module_code.name)
     useEffect(() => {
-        axios.get("http://localhost:2800/cards/getCards")
+        axios.get(`http://localhost:2800/cards/getCards/${module_code.code}`)
             .then(res => {
                 console.log("Response: ",res.data)
                 if (res.data.length > 0) {
@@ -23,18 +27,7 @@ function Answer() {
                     }
                 } else {
                     // Handle case when there are no cards returned
-                    setCard(prevState => {
-                        prevState.push({
-                            answer: "",
-                            correct: false,
-                            question: "none present",
-                            module: {
-                                code: "",
-                                name: ""
-                            },
-                            card_id: null
-                        })
-                    });
+
                 }
             }).catch(err => {
             console.error("Error fetching data:", err);
@@ -92,6 +85,7 @@ function Answer() {
     function handleIncorrect(){
 
     }
+
     return(
         <>
             {card.filter(card => card.correct === false).map(card => {
@@ -107,6 +101,7 @@ function Answer() {
                     </div>
                 )
             })}
+            <AddCard{...module_code.code}/>
         </>
 
     )

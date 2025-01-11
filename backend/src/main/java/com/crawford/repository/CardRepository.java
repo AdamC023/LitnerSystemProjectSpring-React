@@ -9,4 +9,6 @@ public interface CardRepository extends CrudRepository<Card, Integer> {
 	
 	int countByModule_Code(String code);
 
+	Iterable<Card> findAllByModule_Code(String code);
+
 }
