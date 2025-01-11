@@ -1,31 +1,34 @@
 import { useEffect,useState } from 'react'
 import axios from 'axios'
 import '../App.css'
+import {useParams} from "react-router-dom";
 
 function AddCard() {
-    const [card, setCard] = useState({
+    const code = useParams();
+    console.log("this code",code.code)
+    const [addCard, setAddCard] = useState({
         answer: "",
         question: "",
         correct: false,
         module: {
-            code:""
+            code:code.code,
+            name:""
         },
     });
     //const[cardList, setCardList] = useState([])
     const[modules, setModules] = useState([]);
 
-    const addCard = e => {
-        const addCard = {
-            question: card.question,
-            answer: card.answer,
-            correct: card.correct,
+    const addCardPost = e => {
+        const addCardPost = {
+            question: addCard.question,
+            answer: addCard.answer,
+            correct: addCard.correct,
             module:{
-                ...card.module,
-                    code: document.getElementById(card.module.code).value
-                }
+                code:addCard.module.code,
+                name:addCard.module.name,
+            }
         }
-        console.log("Card to submit: " + addCard.question+ " " + addCard.answer);
-        axios.post("http://localhost:2800/cards/addCard", addCard)
+        axios.post(`http://localhost:2800/cards/addCard`, addCardPost)
             .then(res => {
                 console.log(res)
                 console.log(res.data)
@@ -49,47 +52,31 @@ function AddCard() {
             })
     },[])
     const handleChange = e => {
-        setCard({
-            ...card,
+        setAddCard({
+            ...addCard,
             [e.target.name]: e.target.value,
-        })
-    }
-
-    const handleChangeModule = e => {
-        setCard({
-            ...card,
-            module:{
-                ...card.module,
-                code: e.target.value,
-            }
         })
     }
 
 
 
     useEffect(() => {
-        console.log("Updated card:", card);
-    }, [card]);
+        console.log("Updated card:", addCard);
+    }, [addCard]);
 
 
     return (
         <>
-            <h1>
-                Add Card Page
-            </h1>
+            <div>
             <input type="text" name="question" placeholder="question" onChange={handleChange}/>
             <input type="text" name="answer" placeholder="answer" onChange={handleChange}/>
-            <select name="module" onChange={handleChangeModule}>
-                <option value="">None</option>
-                {modules.map(module => (
-                    <option id={module.code} value={module.code}>{module.name} </option>
-                ))}
-            </select>
-            <p>{card.question}</p>
-            <p>{card.answer}</p>
-            <p>{card.module.code}</p>
-            <button type="submit" onClick={addCard}>submit</button>
-        </>
+
+            <p>{addCard.question}</p>
+            <p>{addCard.answer}</p>
+            <p>{addCard.module.code}</p>
+            <button type="submit" onClick={addCardPost}>submit</button>
+            </div>
+            </>
 
 
     )
