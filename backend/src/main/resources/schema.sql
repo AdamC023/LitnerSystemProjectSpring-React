@@ -1,6 +1,3 @@
-DROP TABLE IF EXISTS card;
-DROP TABLE IF EXISTS module;
-
 CREATE TABLE module (
                         code VARCHAR(30) PRIMARY KEY,
                         name VARCHAR(100)
@@ -17,6 +14,8 @@ CREATE TABLE card (
                       code VARCHAR(30), -- Add the 'code' column to reference the module table
                       CONSTRAINT fk_module FOREIGN KEY (code) REFERENCES module(code)
 );
+
+
 
 INSERT INTO module (code, name) VALUES
     ('MATH101', 'Basic Math'),

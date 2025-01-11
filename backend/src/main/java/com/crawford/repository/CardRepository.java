@@ -11,4 +11,5 @@ public interface CardRepository extends CrudRepository<Card, Integer> {
 
 	Iterable<Card> findAllByModule_Code(String code);
 
+	Card findCardById(Integer cardId);
 }

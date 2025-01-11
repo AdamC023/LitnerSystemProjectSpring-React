@@ -15,6 +15,7 @@ function Answer() {
         question: "",
         correct: false,
         last_answered: "",
+        box: 0,
         module: {
             code:module_code.code,
             name:""
@@ -80,15 +81,18 @@ function Answer() {
     }
 
     function handleCorrect(card){
-        setCard(prevState => {
-            card.correct = true
-            return prevState;
-        })
-        axios.post("http://localhost:2800/cards/updateTrue", card)
+        const updateCard = {
+            ...card,
+            correct: true,
+            lastAnswered: new Date().toISOString().slice(0,10),
+            box: 2,
+        }
+        console.log("updateCard",updateCard)
+        console.log("card",card)
+        axios.post("http://localhost:2800/cards/updateTrue", updateCard)
             .then(res => {
                 setReload(!reload)
-                console.log(res)
-                console.log(res.data)
+                console.log("POST MADE",res.data)
             })
             .catch(err => {
                 console.log(err)
@@ -103,12 +107,14 @@ function Answer() {
         let dateISO;
         dateISO = new Date().toISOString()
         dateISO = dateISO.slice(0,10)
+
         console.log("DATE: lastAnswered" , dateISO)
         const addCardPost = {
             question: addCard.question,
             answer: addCard.answer,
             correct: addCard.correct,
             lastAnswered: dateISO,
+            box: 1,
             module:{
                 code:addCard.module.code,
                 name:addCard.module.name,

@@ -1,6 +1,5 @@
 package com.crawford.controller;
 
-import com.crawford.model.Module;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,24 +30,31 @@ public class CardController {
     public Iterable<Card> getCards(@PathVariable String code){
     	return cardRepository.findAllByModule_Code(code);
     }
-    
+
+    @GetMapping("/testDevTools")
+    public String testDevTools() {
+        System.out.println("Testing Spring DevTools.....");
+        return "DevTools is working! " + System.currentTimeMillis();
+    }
+
+
     @PostMapping("/updateTrue")
-    public Card updateCards(@RequestBody Card card) {
-    	
-    	Optional<Card> cardOptional = cardRepository.findById(card.getCard_id());
-    	if(cardOptional.isPresent()) {
-    		Card cardToUpdate = cardOptional.get();
-    		cardToUpdate.setCorrect(true);
-    		cardRepository.save(cardToUpdate);
-    	}
-    	return card;
+    public String updateCards(@RequestBody Card card) {
+        System.out.println("HELLO WORLD THIS A TEST");
+        Card cardToUpdate = cardRepository.findCardById(card.getCard_id());
+        if (cardToUpdate == null) {return "card not found";}
+        cardToUpdate.setCorrect(card.getCorrect());
+        cardToUpdate.setLastAnswered(card.getLastAnswered());
+        cardToUpdate.setBox(card.getBox());
+        cardRepository.save(cardToUpdate);
+        return "Card was updated" + card.toString();
     	
     }
+
     
     @GetMapping("/getModuleCardCount/{code}")
     public int countCards(@PathVariable String code) {
-    	int count = cardRepository.countByModule_Code(code);
-    	return count;
+        return cardRepository.countByModule_Code(code);
     }
 
 
