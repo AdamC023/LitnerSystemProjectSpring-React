@@ -14,6 +14,7 @@ function Answer() {
         answer: "",
         question: "",
         correct: false,
+        last_answered: "",
         module: {
             code:module_code.code,
             name:""
@@ -103,11 +104,13 @@ function Answer() {
             question: addCard.question,
             answer: addCard.answer,
             correct: addCard.correct,
+            last_answered: new Date(),
             module:{
                 code:addCard.module.code,
                 name:addCard.module.name,
             }
         }
+        console.log("DATE" , addCardPost.last_answered)
         axios.post(`http://localhost:2800/cards/addCard`, addCardPost)
             .then(res => {
                 setReload(!reload)
@@ -124,6 +127,12 @@ function Answer() {
             ...addCard,
             [e.target.name]: e.target.value,
         })
+    }
+
+    const checkDate = e => {
+        const date = new Date()
+        console.log(date)
+        console.log(date.toJSON())
     }
 
     return(
@@ -208,10 +217,10 @@ function Answer() {
                     >
                         Add Card
                     </button>
+                    <button type="submit" onClick={checkDate}>CHECK DATE</button>
                 </div>
             </div>
         </>
-
 
 
     )
