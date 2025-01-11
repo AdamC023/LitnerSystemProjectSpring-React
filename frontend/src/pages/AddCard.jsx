@@ -15,6 +15,7 @@ function AddCard() {
             name:""
         },
     });
+    const [date, setDate] = useState()
     //const[cardList, setCardList] = useState([])
     const[modules, setModules] = useState([]);
 
@@ -64,17 +65,20 @@ function AddCard() {
         console.log("Updated card:", addCard);
     }, [addCard]);
 
-
+    const checkDate = e => {
+        console.log("date",date)
+        console.log(Date.now())
+    }
     return (
         <>
             <div>
             <input type="text" name="question" placeholder="question" onChange={handleChange}/>
             <input type="text" name="answer" placeholder="answer" onChange={handleChange}/>
-
+            <button type="submit" onClick={checkDate}>submit</button>
             <p>{addCard.question}</p>
             <p>{addCard.answer}</p>
             <p>{addCard.module.code}</p>
-            <button type="submit" onClick={addCardPost}>submit</button>
+
             </div>
             </>
 

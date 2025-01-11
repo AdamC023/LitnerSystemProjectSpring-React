@@ -59,7 +59,7 @@ function Modules() {
             })
 
 
-    }, []);
+    }, [reload]);
 
 
 

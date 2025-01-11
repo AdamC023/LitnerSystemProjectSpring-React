@@ -12,6 +12,8 @@ CREATE TABLE card (
                       question VARCHAR(100),
                       answer VARCHAR(100),
                       correct BIT,
+                      box INT,
+                      last_answered DATE NOT NULL,
                       code VARCHAR(30), -- Add the 'code' column to reference the module table
                       CONSTRAINT fk_module FOREIGN KEY (code) REFERENCES module(code)
 );
