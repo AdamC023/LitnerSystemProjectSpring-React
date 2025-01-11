@@ -27,7 +27,11 @@ function Answer() {
     console.log("module code",module_code.code)
     console.log("module name",module_code.name)
     useEffect(() => {
-        axios.get(`http://localhost:2800/cards/getCards/${module_code.code}`)
+        let currentDate;
+        currentDate = new Date();
+        currentDate = currentDate.toISOString().slice(0,10)
+
+        axios.get(`http://localhost:2800/cards/getCards/${module_code.code}/${currentDate}`)
             .then(res => {
                 console.log("Response: ",res.data)
                 if (res.data.length > 0) {
@@ -81,26 +85,62 @@ function Answer() {
     }
 
     function handleCorrect(card){
-        const updateCard = {
-            ...card,
-            correct: true,
-            lastAnswered: new Date().toISOString().slice(0,10),
-            box: 2,
+        if(card.box < 3){
+            const updateCard = {
+                ...card,
+                correct: true,
+                lastAnswered: new Date().toISOString().slice(0,10),
+                box: card.box + 1,
+            }
+            console.log("updateCard",updateCard)
+            console.log("card",card)
+            axios.post("http://localhost:2800/cards/updateTrue", updateCard)
+                .then(res => {
+                    setReload(!reload)
+                })
         }
-        console.log("updateCard",updateCard)
-        console.log("card",card)
-        axios.post("http://localhost:2800/cards/updateTrue", updateCard)
-            .then(res => {
-                setReload(!reload)
-                console.log("POST MADE",res.data)
-            })
-            .catch(err => {
-                console.log(err)
-            })
-
-
+        else{
+            const updateCard = {
+                ...card,
+                lastAnswered: new Date().toISOString().slice(0,10),
+                correct: true,
+            }
+            console.log("updateCard",updateCard)
+            console.log("card",card)
+            axios.post("http://localhost:2800/cards/updateTrue", updateCard)
+                .then(res => {
+                        setReload(!reload)
+                    }
+                )
+        }
     }
-    function handleIncorrect(){
+    function handleIncorrect(card){
+        if(card.box > 1){
+            const updateCard = {
+                ...card,
+                correct: true,
+                lastAnswered: new Date().toISOString().slice(0,10),
+                box: card.box - 1,
+            }
+            axios.post("http://localhost:2800/cards/updateTrue", updateCard)
+                .then(res => {
+                    setReload(!reload)
+                    console.log(res)
+                    console.log(res.data)
+                })
+        }
+        else{
+            const updateCard = {
+                ...card,
+                lastAnswered: new Date().toISOString().slice(0,10),
+                correct: true,
+            }
+            axios.post("http://localhost:2800/cards/updateTrue", updateCard)
+                .then(res => {
+                    setReload(!reload)
+                    console.log(res)
+                })
+        }
 
     }
     const addCardPost = e => {
@@ -185,7 +225,7 @@ function Answer() {
                                     Correct
                                 </button>
                                 <button
-                                    onClick={handleIncorrect}
+                                    onClick={() =>handleIncorrect(card)}
                                     className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-all duration-300"
                                 >
                                     Incorrect
