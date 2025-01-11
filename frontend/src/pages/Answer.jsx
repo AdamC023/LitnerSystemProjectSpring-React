@@ -100,17 +100,21 @@ function Answer() {
 
     }
     const addCardPost = e => {
+        let dateISO;
+        dateISO = new Date().toISOString()
+        dateISO = dateISO.slice(0,10)
+        console.log("DATE: lastAnswered" , dateISO)
         const addCardPost = {
             question: addCard.question,
             answer: addCard.answer,
             correct: addCard.correct,
-            last_answered: new Date(),
+            lastAnswered: dateISO,
             module:{
                 code:addCard.module.code,
                 name:addCard.module.name,
             }
         }
-        console.log("DATE" , addCardPost.last_answered)
+        console.log("DATE: lastAnswered" , addCardPost.lastAnswered)
         axios.post(`http://localhost:2800/cards/addCard`, addCardPost)
             .then(res => {
                 setReload(!reload)

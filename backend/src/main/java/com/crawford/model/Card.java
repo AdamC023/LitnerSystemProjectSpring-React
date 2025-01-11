@@ -1,8 +1,10 @@
 package com.crawford.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -17,7 +19,9 @@ public class Card {
   private String question;
   private String answer;
   private boolean correct;
-  private LocalDateTime date;
+  private Integer box;
+  @Column(name = "last_answered")
+  private LocalDate lastAnswered;
   @ManyToOne
   @JoinColumn(name="code")
   private Module module;
@@ -25,12 +29,21 @@ public class Card {
   public Card(){
   }
   /** Constructor for Registration. */
-  public Card(String question, String answer, boolean correct,LocalDateTime date, Module module) {
+  public Card(String question, String answer, boolean correct,LocalDate lastAnswered, Module module, Integer box) {
     this.answer = answer;
     this.question = question;
     this.correct = correct;
-    this.date = date;
+    this.lastAnswered = lastAnswered;
     this.module = module;
+    this.box = box;
+  }
+  
+  public int getBox() {
+	  return box;
+  }
+  
+  public void setBox(Integer box) {
+	  this.box = box;
   }
 
   public Integer getCard_id(){
@@ -53,12 +66,12 @@ public class Card {
 	  return correct;
   }
   
-  public LocalDateTime getDate() {
-	  return date;
+  public LocalDate getLastAnswered() {
+	  return lastAnswered;
   }
   
-  public void setDate(LocalDateTime date) {
-	  this.date = date;
+  public void setLastAnswered(LocalDate lastAnswered) {
+	  this.lastAnswered = lastAnswered;
   }
   public void setCorrect(boolean correct) {
 	  this.correct = correct;
