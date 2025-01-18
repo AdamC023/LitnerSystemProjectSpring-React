@@ -1,9 +1,11 @@
 package com.crawford.controller;
 
-import com.crawford.model.Module;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.*;
 import com.crawford.repository.ModuleRepository;
 import com.crawford.model.Card;
@@ -27,28 +29,38 @@ public class CardController {
     	return cardRepository.save(card);
     }
 
-    @GetMapping("/getCards/{code}")
-    public Iterable<Card> getCards(@PathVariable String code){
-    	return cardRepository.findAllByModule_Code(code);
+    @GetMapping("/getCards/{code}/{currentDate}")
+    public Iterable<Card> getCards(@PathVariable String code, @PathVariable String currentDate){
+        LocalDate boxOneDate = LocalDate.parse(currentDate).minusDays(1);
+        LocalDate boxTwoDate = LocalDate.parse(currentDate).minusDays(3);
+        LocalDate boxThreeDate = LocalDate.parse(currentDate).minusDays(7);
+        return cardRepository.findByModuleCode(code,boxOneDate,boxTwoDate,boxThreeDate);
     }
-    
+
+    @GetMapping("/testDevTools")
+    public String testDevTools() {
+        System.out.println("Testing Spring DevTools.....");
+        return "DevTools is working! " + System.currentTimeMillis();
+    }
+
+
     @PostMapping("/updateTrue")
-    public Card updateCards(@RequestBody Card card) {
-    	
-    	Optional<Card> cardOptional = cardRepository.findById(card.getCard_id());
-    	if(cardOptional.isPresent()) {
-    		Card cardToUpdate = cardOptional.get();
-    		cardToUpdate.setCorrect(true);
-    		cardRepository.save(cardToUpdate);
-    	}
-    	return card;
+    public String updateCards(@RequestBody Card card) {
+        System.out.println("HELLO WORLD THIS A TEST");
+        Card cardToUpdate = cardRepository.findCardById(card.getCard_id());
+        if (cardToUpdate == null) {return "card not found";}
+        cardToUpdate.setCorrect(card.getCorrect());
+        cardToUpdate.setLastAnswered(card.getLastAnswered());
+        cardToUpdate.setBox(card.getBox());
+        cardRepository.save(cardToUpdate);
+        return "Card was updated" + card.toString();
     	
     }
+
     
     @GetMapping("/getModuleCardCount/{code}")
     public int countCards(@PathVariable String code) {
-    	int count = cardRepository.countByModule_Code(code);
-    	return count;
+        return cardRepository.countByModule_Code(code);
     }
 
 
